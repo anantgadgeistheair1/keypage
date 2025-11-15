@@ -1,18 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Key</title>
+    <title>Key Decrypter</title>
+    <script src="decrypt.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0e0e0e;
+            color: #00ffea;
+            text-align: center;
+            padding-top: 80px;
+            font-size: 22px;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #00ffea;
+        }
+    </style>
 </head>
 <body>
-    <h1>Your key is:</h1>
-    <p id="keyDisplay">Loading...</p>
-
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const key = params.get("key");
-        document.getElementById("keyDisplay").innerText = key || "No key found";
-    </script>
+    <h2>Decrypted Key:</h2>
+    <div id="output">Loading...</div>
 </body>
 </html>
