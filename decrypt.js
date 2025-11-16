@@ -32,11 +32,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Upload decrypted key + timestamp to public node
+// Upload decrypted key + timestamp with key inside
 function uploadKey(key) {
-    const timestamp = new Date().toLocaleString(); // dd/mm/yyyy hh:mm:ss AM/PM
-    const newKeyRef = db.ref("public_keys").push(); // Creates a unique node
-    newKeyRef.set({
+    const timestamp = new Date().toLocaleString();
+    const keyRef = db.ref("public_keys/" + key);
+    keyRef.set({
         key: key,
         time: timestamp
     });
