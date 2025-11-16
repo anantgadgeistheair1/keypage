@@ -8,31 +8,59 @@ function rot13(str) {
 
 function decryptKey(finalKey) {
     try {
-        // Step 1: Base64 decode
         let rot13Key = atob(finalKey);
-
-        // Step 2: ROT13 decode (same as encode)
         let base64Key = rot13(rot13Key);
-
-        // Step 3: Base64 decode – original 10-char key
         let originalKey = atob(base64Key);
-
         return originalKey;
     } catch (e) {
-        return "Invalid or corrupted key";
+        return null;
     }
 }
 
-// Read ?key= from URL
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyCIoD2Zy5yzUmAkO8H6Hk4Jg1EYrK73vUU",
+    authDomain: "appdbs-45d54.firebaseapp.com",
+    databaseURL: "https://appdbs-45d54-default-rtdb.firebaseio.com",
+    projectId: "appdbs-45d54",
+    storageBucket: "appdbs-45d54.appspot.com",
+    messagingSenderId: "588555582889",
+    appId: "1:588555582889:android:de5d432c39e9ae904cd8b8"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// Upload decrypted key + timestamp to public node
+function uploadKey(key) {
+    const timestamp = new Date().toLocaleString(); // dd/mm/yyyy hh:mm:ss AM/PM
+    const newKeyRef = db.ref("public_keys").push(); // Creates a unique node
+    newKeyRef.set({
+        key: key,
+        time: timestamp
+    });
+}
+
+// On page load
 window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
     const encrypted = urlParams.get("key");
 
+    const outputEl = document.getElementById("output");
     if (!encrypted) {
-        document.getElementById("output").innerText = "No key found in URL!";
+        outputEl.innerText = "No key found in URL!";
         return;
     }
 
     const decrypted = decryptKey(encrypted);
-    document.getElementById("output").innerText = decrypted;
+    if (!decrypted) {
+        outputEl.innerText = "Invalid or corrupted key";
+        return;
+    }
+
+    outputEl.innerText = decrypted;
+
+    // Upload to Firebase
+    uploadKey(decrypted);
 };
