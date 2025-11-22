@@ -3,9 +3,9 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.yourcompany.yourapp",
+      "package_name": "com.tutorial",
       "sha256_cert_fingerprints": [
-        "YOUR_APP_SHA256_CERT_FINGERPRINT"
+        "6B:A0:83:09:2A:38:CF:DC:80:8A:2C:A5:EF:F6:7F:34:38:94:03:27:DB:74:26:51:56:62:CD:8D:00:AB:80:C3"
       ]
     }
   }
