@@ -1,0 +1,2 @@
+# This file tells GitHub Pages to skip Jekyll processing
+# This allows files in dot-prefixed directories like .well-known/ to be served
